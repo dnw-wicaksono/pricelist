@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-RXH3D2Z3NJ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-RXH3D2Z3NJ');
+</script>    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Infokom - Pricelist Accessories</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    background:#f4f4f4;
+}
+
+header{
+    background:#0d6efd;
+    color:white;
+    text-align:center;
+    padding:20px;
+}
+
+.marketing{
+    margin-top:20px;
+    background:white;
+    color:#222;
+    padding:18px;
+    border-radius:15px;
+    display:inline-block;
+    box-shadow:0 6px 15px rgba(0,0,0,.15);
+}
+
+.marketing a{
+    display:inline-block;
+    margin-top:12px;
+    padding:12px 25px;
+    background:#25D366;
+    color:white;
+    text-decoration:none;
+    border-radius:30px;
+    font-weight:bold;
+}
+
+.container{
+    width:95%;
+    max-width:1200px;
+    margin:auto;
+    padding:20px;
+    overflow-x:auto;
+}
+
+#search{
+    width:100%;
+    padding:14px;
+    border-radius:10px;
+    border:2px solid #0d6efd;
+    margin-bottom:20px;
+}
+  
+table{
+    width:100%;
+    border-collapse:separate;
+    border-spacing:0 10px;
+    background:transparent;
+    min-width:800px;
+}
+  
+tbody tr{
+    background:white;
+    box-shadow:0 4px 12px rgba(0,0,0,.08);
+    transition:.3s;
+}
+tbody td{
+    background:white;
+}
+tbody tr:hover{
+    transform:scale(1.01);
+    transition:.3s;
+}
+td:first-child{
+    border-radius:12px 0 0 12px;
+    font-weight:bold;
+    color:#0d6efd;
+}
+  
+th{
+    background:linear-gradient(135deg,#0d6efd,#004bb5);
+    color:white;
+    padding:15px;
+    font-size:15px;
+    text-transform:uppercase;
+    letter-spacing:1px;
+}
+
+thead tr{
+    box-shadow:0 4px 10px rgba(0,0,0,.15);
+}
+
+th:first-child{
+    border-radius:12px 0 0 12px;
+}
+
+th:last-child{
+    border-radius:0 12px 12px 0;
+}
+  td{
+    padding:15px;
+    background:white;
+    border:none;
+}
+td:last-child{
+    border-radius:0 12px 12px 0;
+    font-weight:bold;
+    color:#198754;
+}
+
+footer{
+    margin-top:30px;
+    text-align:center;
+    padding:20px;
+    color:#666;
+}
+
+  @media(max-width:768px){
+
+    .container{
+        width:100%;
+        padding:10px;
+    }
+
+    table{
+        font-size:13px;
+    }
+
+  h1{
+      font-size:24px;
+  }
+  }
+</style>
+
+</head>
+<body>
+
+<header>
+<h1>Infokom</h1>
+<p>Pricelist Accessories</p>
+
+<div class="marketing">
+
+<p>👨‍💼 DIAN WICAKSONO</p>
+<p>📞 0852-2635-6334</p>
+
+<a href="https://wa.me/6285226356334" 
+  target="_blank" 
+rel="noopener noreferrer"
+onclick="gtag('event','klik_whatsapp');">
+💬 Chat WhatsApp
+</a>
+</div>
+</header>
+
+<div class="container">
+
+<input
+id="search"
+type="text"
+placeholder="Cari Produk, Merk, atau Seri...">
+
+<table id="pricelist">
+
+<thead></thead>
+
+<tbody></tbody>
+
+</table>
+
+</div>
+
+<footer>
+© Infokom 
+</footer>
+
+<script>
+
+const csvUrl="https://docs.google.com/spreadsheets/d/e/2PACX-1vRgXpStc2KxTmNB3HjLE_M-ZNfbv5QqEnflZtG-A5frwwI_-HSnRWTAFeWNg0lZ78hXh0YGHKOXK8it/pub?gid=0&single=true&output=csv";
+
+fetch(csvUrl)
+.then(res=>res.text())
+.then(csv=>{
+
+const lines=csv.trim().split(/\r?\n/);
+
+const headers=lines[0].split(",");
+
+const thead=document.querySelector("thead");
+const tbody=document.querySelector("tbody");
+
+let head="<tr>";
+
+headers.forEach(h=>{
+head+=`<th>${h.replace(/"/g,"")}</th>`;
+});
+
+head+="</tr>";
+
+thead.innerHTML=head;
+
+for(let i=1;i<lines.length;i++){
+
+const cols=lines[i].split(",");
+
+let row="<tr>";
+
+cols.forEach((col,index)=>{
+
+    col = col.replace(/"/g,"");
+
+    if(headers[index].trim().toUpperCase()=="HARGA"){
+
+        if(col.trim().toUpperCase()=="CALL"){
+
+            col="CALL";
+
+        }else if(col.trim()===""){
+
+            col="";
+
+        }else{
+
+            const angka=Number(col);
+
+            if(!isNaN(angka) && angka>0){
+                col="Rp "+angka.toLocaleString("id-ID");
+            }else{
+                col="";
+            }
+
+        }
+
+    }
+
+    row += `<td>${col}</td>`;
+
+});
+
+row+="</tr>";
+
+tbody.innerHTML+=row;
+
+}
+
+});
+
+document.getElementById("search").addEventListener("keyup",function(){
+
+const keyword=this.value.toLowerCase();
+
+document.querySelectorAll("#pricelist tbody tr").forEach(row=>{
+
+const text=row.innerText.toLowerCase();
+
+row.style.display=text.includes(keyword)?"":"none";
+
+});
+
+});
+
+</script>
+
+</body>
+</html>
